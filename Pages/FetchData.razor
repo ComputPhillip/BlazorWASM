@@ -1,13 +1,13 @@
 ﻿@page "/fetchdata"
 @inject HttpClient Http
 
-<PageTitle>Weather forecast</PageTitle>
+<PageTitle>Insepction Log</PageTitle>
 
-<h1>Weather forecast</h1>
+<h1>NDT Inspection Log</h1>
 
-<p>This component demonstrates fetching data from the server.</p>
+<p>Fetching data from the server.</p>
 
-@if (forecasts == null)
+@if (inspectionPODS == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -17,19 +17,19 @@ else
         <thead>
             <tr>
                 <th>Date</th>
-                <th>Temp. (C)</th>
-                <th>Temp. (F)</th>
+                <th>Method</th>
+                <th>Serial Number</th>
                 <th>Summary</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var forecast in forecasts)
+            @foreach (var inspectPODS in inspectionPODS)
             {
                 <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
-                    <td>@forecast.TemperatureC</td>
-                    <td>@forecast.TemperatureF</td>
-                    <td>@forecast.Summary</td>
+                    <td>@inspectPODS.Date.ToShortDateString()</td>
+                    <td>@inspectPODS.Method</td>
+                    <td>@inspectPODS.SerialNumber</td>
+                    <td>@inspectPODS.Summary</td>
                 </tr>
             }
         </tbody>
@@ -37,21 +37,21 @@ else
 }
 
 @code {
-    private WeatherForecast[]? forecasts;
+    private InspectionPOD[]? inspectionPODS;
 
     protected override async Task OnInitializedAsync()
     {
-        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
+        inspectionPODS = await Http.GetFromJsonAsync<InspectionPOD[]>("sample-data/weather.json");
     }
 
-    public class WeatherForecast
+    public class InspectionPOD
     {
         public DateOnly Date { get; set; }
 
-        public int TemperatureC { get; set; }
+        public string Method { get; set; } = "method required";
 
         public string? Summary { get; set; }
 
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+        public string SerialNumber { get; set; } = "serial number required";
     }
 }
